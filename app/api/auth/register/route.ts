@@ -1,0 +1,1 @@
+export { ApiRegister as POST } from "@/features/auth";
