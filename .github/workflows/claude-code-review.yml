@@ -1,0 +1,64 @@
+name: Claude Code Review
+
+# Fires on PRs targeting git-flow's integration branches. For the
+# pull_request event, the `branches` filter matches the PR's *base* (target)
+# branch, so this triggers exactly at git-flow's merge points:
+#   feature/* -> develop, release/* -> main, hotfix/* -> main/develop.
+# `develop` doesn't exist yet, but the filter is forward-compatible.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+      - "release/**"
+      - "hotfix/**"
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            BASE BRANCH: ${{ github.event.pull_request.base.ref }}
+
+            This repo follows git-flow. Calibrate review strictness to the base branch:
+            - base = main, or release/**, or hotfix/**: this is heading to production
+              (a release or hotfix). Be strict — flag anything not production-ready,
+              missing Prisma migrations for schema changes, breaking changes, or
+              regressions.
+            - base = develop: this is normal feature integration. Review for
+              correctness and code quality; minor follow-ups are fine.
+
+            Stack context: Next.js App Router + React + TypeScript, Tailwind v4 +
+            daisyui, Prisma 7 against MariaDB via @prisma/adapter-mariadb (client
+            generated to lib/generated/prisma, not the default location). Domain
+            model is board-scoped (User/Board via UserBoard) with Category,
+            Transaction, CategoryBudget, and MonthlyBudget hanging off Board.
+
+            Focus on:
+            - Correctness and potential bugs
+            - Security implications
+            - Performance (including Prisma query patterns)
+            - Consistency with existing patterns in the codebase
+
+            Leave inline comments on specific lines where possible, and a short
+            summary comment at the end.
+
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
