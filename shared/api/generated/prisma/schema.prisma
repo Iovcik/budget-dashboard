@@ -1,0 +1,111 @@
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ─── Users & Boards ──────────────────────────────────────────────────────────
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  password     String
+  boards       UserBoard[]
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Board {
+  id              Int              @id @default(autoincrement())
+  name            String
+  members         UserBoard[]
+  categories      Category[]
+  categoryBudgets CategoryBudget[]
+  monthlyBudgets  MonthlyBudget[]
+  transactions    Transaction[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model UserBoard {
+  id       Int       @id @default(autoincrement())
+  userId   Int
+  boardId  Int
+  role     BoardRole @default(MEMBER)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board    Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  joinedAt DateTime  @default(now())
+
+  @@unique([userId, boardId])
+}
+
+enum BoardRole {
+  OWNER
+  MEMBER
+}
+
+// ─── Categories & Transactions ───────────────────────────────────────────────
+
+model Category {
+  id              Int              @id @default(autoincrement())
+  boardId         Int
+  board           Board            @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  name            String
+  color           String           @default("#10b981")
+  categoryBudgets CategoryBudget[]
+  transactions    Transaction[]
+
+  @@unique([boardId, name])
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  boardId     Int
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  amount      Decimal  @db.Decimal(10, 2)
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([boardId, categoryId, date])
+}
+
+// ─── Budgets ──────────────────────────────────────────────────────────────────
+
+model CategoryBudget {
+  id         Int      @id @default(autoincrement())
+  boardId    Int
+  board      Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  amount     Decimal  @db.Decimal(10, 2)
+  month      Int
+  year       Int
+  createdAt  DateTime @default(now())
+
+  @@unique([boardId, categoryId, month, year])
+}
+
+model MonthlyBudget {
+  id        Int      @id @default(autoincrement())
+  boardId   Int
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  amount    Decimal  @db.Decimal(10, 2)
+  month     Int
+  year      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([boardId, month, year])
+}
