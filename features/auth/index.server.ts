@@ -1,2 +1,1 @@
-import { handlers } from "./login/model/session";
-export { handlers }
+export { handlers, auth } from "./login/model/session";

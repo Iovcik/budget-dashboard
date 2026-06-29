@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/shared/api/db";
 import { User } from "@/shared/api/generated/prisma";
 import { TUserCredentials, TUserRegistration } from "../model/schema";
