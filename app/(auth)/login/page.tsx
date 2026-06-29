@@ -1,1 +1,3 @@
-export { LoginForm } from "@/features/auth/index";
+import { LoginForm } from "@/features/auth/index";
+
+export default LoginForm;

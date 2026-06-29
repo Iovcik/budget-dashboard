@@ -1,5 +1,5 @@
 import { db } from "@/shared/api/db";
-import { User } from "@/lib/generated/prisma";
+import { User } from "@/shared/api/generated/prisma";
 import { TUserCredentials, TUserRegistration } from "../model/schema";
 import bcrypt from "bcryptjs";
 
@@ -15,7 +15,6 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
         throw error;
     }
 }
-
 
 export const createUser = async (user: TUserRegistration) => {
     try {

@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { db } from "@/shared/api/db";
-import { LoginSchema } from '../validations/auth';
+import { UserCredentialsSchema } from './schema';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     session: { strategy: "jwt" },
@@ -14,8 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 password: {},
             },
             authorize: async (credentials) => {
-                const parsed = LoginSchema.safeParse(credentials);
-
+                const parsed = UserCredentialsSchema.safeParse(credentials);
                 if (!parsed.success) return null
 
                 const { email, password } = parsed.data;

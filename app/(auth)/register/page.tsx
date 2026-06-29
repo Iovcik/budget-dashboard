@@ -1,1 +1,2 @@
-export { RegisterForm } from "@/features/auth";
+import { RegisterForm } from "@/features/auth";
+export default RegisterForm;
