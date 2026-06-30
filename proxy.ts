@@ -1,7 +1,7 @@
 import { auth } from '@/features/session';
 
 const publicRoutes = ["/login", "/register"];
-const authRoutes = ["/login"];
+const authRoutes = ["/login", "/register"];
 
 export default auth((req) => {
     const { nextUrl } = req;
