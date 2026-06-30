@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { UserCredentialsSchema } from "../model/schema";
+import { UserCredentialsSchema } from "@/entities/user";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -71,7 +71,7 @@ export const LoginForm = () => {
             className="input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="new-password"
+            autoComplete="current-password"
             required
           />
 
@@ -82,7 +82,7 @@ export const LoginForm = () => {
           )}
 
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? "Signin..." : "Login"}
+            {loading ? "Signing in..." : "Login"}
           </button>
         </form>
       </div>

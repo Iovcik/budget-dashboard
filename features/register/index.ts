@@ -1,0 +1,1 @@
+export { ApiRegister } from "./api/register"

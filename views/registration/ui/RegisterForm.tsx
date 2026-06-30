@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserRegistrationSchema } from "../model/schema";
+import { UserRegistrationSchema } from "@/entities/user";
 
 export const RegisterForm = () => {
   const router = useRouter();

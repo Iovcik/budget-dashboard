@@ -1,27 +1,30 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@/features/auth/index.server';
+import { auth } from '@/features/session';
 
-const protectedRoutes = ['/'];
-const publicRoutes = ['/login', '/register'];
+const publicRoutes = ["/login", "/register"];
+const authRoutes = ["/login"];
 
 export default auth((req) => {
     const { nextUrl } = req;
-    const isLoggedIn = !!req.auth?.user;
+    const isLoggedIn = !!req.auth;
 
-    const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
-    const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-    console.log(nextUrl.pathname, isProtectedRoute, isLoggedIn)
-    if (isProtectedRoute && !isLoggedIn) {
-        return NextResponse.redirect(new URL('/login', nextUrl));
+    const isPublic = publicRoutes.includes(nextUrl.pathname);
+    const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
+    if (!isLoggedIn && !isPublic) {
+        const loginUrl = new URL("/login", nextUrl);
+        loginUrl.searchParams.set("callbackUrl", nextUrl.href);
+        return Response.redirect(loginUrl);
     }
 
-    if (isPublicRoute && isLoggedIn) {
-        return NextResponse.redirect(new URL('/', nextUrl));
+    if (isLoggedIn && isAuthRoute) {
+        return Response.redirect(new URL("/", nextUrl));
     }
+
+    return;
 });
 
 export const config = {
     matcher: [
-        '/((?!api|_next/static|_next/image|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        "/((?!api/auth|_next/static|_next/image|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
     ],
 };

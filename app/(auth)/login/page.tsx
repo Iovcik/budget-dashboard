@@ -1,3 +1,3 @@
-import { LoginForm } from "@/features/auth/index";
+import { LoginForm } from "@/views";
 
 export default LoginForm;

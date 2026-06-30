@@ -1,1 +1,1 @@
-export { createUser, getUserByEmail, verifyPassword } from "./api/user";
+export { createUser, getUserByEmail, getUserById } from "./api/user";

@@ -1,1 +1,1 @@
-export { ApiRegister as POST } from "@/features/auth";
+export { ApiRegister as POST } from "@/features/register";

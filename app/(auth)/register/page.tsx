@@ -1,2 +1,3 @@
-import { RegisterForm } from "@/features/auth";
+import { RegisterForm } from "@/views";
+
 export default RegisterForm;
