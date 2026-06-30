@@ -1,47 +1,22 @@
+import "server-only";
+
 import { db } from "@/shared/api/db";
 import { User } from "@/shared/api/generated/prisma";
-import { TUserCredentials, TUserRegistration } from "../model/schema";
-import bcrypt from "bcryptjs";
+import { TUserRegistration } from "../model/schema";
 
-export const getUserByEmail = async (email: string): Promise<User | null> => {
+type CreateUserInput = Omit<TUserRegistration, 'password'> & { password: string };
+
+export const getUserByEmail = async (email: string): Promise<User | null> => await db.user.findUnique({ where: { email } });
+
+export const getUserById = async (id: string): Promise<Omit<User, "password"> | null> => await db.user.findUnique({ where: { id: Number(id) }, omit: { password: true } });
+
+export const createUser = async (user: CreateUserInput) => {
     try {
-        const user = await db.user.findUnique({ where: { email } });
-
-        if (!user) return null;
-
-        return user;
-    } catch (error) {
-        console.error('error on create user', error)
-        throw error;
-    }
-}
-
-export const createUser = async (user: TUserRegistration) => {
-    try {
-        const cratedUser = await db.user.create({
+        const createdUser = await db.user.create({
             data: user
         });
 
-        return cratedUser;
-    } catch (error) {
-        console.error('error on create user', error)
-        throw error;
-    }
-}
-
-export const verifyPassword = async ({ email, password }: TUserCredentials): Promise<boolean> => {
-    try {
-        const user = await db.user.findUnique({
-            where: { email }, select: {
-                password: true
-            }
-        });
-        if (!user) return false;
-        const isOkCrypt = await bcrypt.compare(password, user.password);
-
-        if (!isOkCrypt) return false;
-
-        return true
+        return createdUser;
     } catch (error) {
         console.error('error on create user', error)
         throw error;
