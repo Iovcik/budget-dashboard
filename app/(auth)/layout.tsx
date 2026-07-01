@@ -8,7 +8,7 @@ export default async function Layout({
 }>) {
   const isAuthenticated = await verifySession();
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="h-screen">
       {isAuthenticated.isAuth && <Header />}
       {children}
     </div>
