@@ -4,9 +4,9 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb"
 const adapter = new PrismaMariaDb({
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
-    ssl: {
-        rejectUnauthorized: false
-    },
+    ssl: process.env.NODE_ENV === 'production'
+        ? { rejectUnauthorized: true }
+        : { rejectUnauthorized: false },
     user: process.env.DB_USER,
     port: Number(process.env.DB_PORT),
     password: process.env.DB_PWD
