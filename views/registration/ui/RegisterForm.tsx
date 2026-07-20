@@ -51,7 +51,7 @@ export const RegisterForm = () => {
   }
 
   return (
-    <div className="card card-xl md:w-xl shadow-sm">
+    <div className="card card-xl md:w-xl shadow-sm m-auto">
       <div className="card-body items-center">
         <div className="card-title text-center">Register</div>
 

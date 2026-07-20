@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/widgets";
-import { verifySession } from "@/features/session";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,16 +24,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isAuthenticated = await verifySession();
-
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        {isAuthenticated.isAuth && <Header />}
-        <main>{children}</main>
+      <body className="min-h-full flex flex-col items-center justify-center">
+        <main className="w-full">{children}</main>
       </body>
     </html>
   );

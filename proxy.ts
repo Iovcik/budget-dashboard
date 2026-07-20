@@ -1,16 +1,14 @@
 import { auth } from '@/features/session';
 
-const publicRoutes = ["/login", "/register"];
 const authRoutes = ["/login", "/register"];
 
 export default auth((req) => {
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
 
-    const isPublic = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    if (!isLoggedIn && !isPublic) {
+    if (!isLoggedIn && !isAuthRoute) {
         const loginUrl = new URL("/login", nextUrl);
         loginUrl.searchParams.set("callbackUrl", nextUrl.href);
         return Response.redirect(loginUrl);
