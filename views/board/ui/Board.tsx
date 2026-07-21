@@ -1,4 +1,7 @@
 import { db } from "@/shared/api";
+import { notFound } from "next/navigation";
+import { verifySession } from "@/features/session";
+import { getUserBoardRole } from "../../../entities/board/index.server";
 
 export const BoardPage = async ({
   params,
@@ -7,20 +10,29 @@ export const BoardPage = async ({
 }) => {
   const { slug } = await params;
 
-  const id = slug.split("-").pop();
+  const slugId = slug.split("-").pop();
 
-  if (!Number(id)) {
-    return <div>Invalid id!</div>;
+  const boardId = Number(slugId);
+
+  if (!boardId || isNaN(boardId)) {
+    return notFound();
   }
 
   const board = await db.board.findUnique({
     where: {
-      id: Number(id),
+      id: boardId,
     },
   });
 
   if (!board) {
-    return <div>Board not found!</div>;
+    return notFound();
+  }
+
+  const session = await verifySession();
+  const user = await getUserBoardRole(boardId, session.userId);
+
+  if (!user || user.boardId !== boardId) {
+    return notFound();
   }
 
   return <h1>{board.name}</h1>;
