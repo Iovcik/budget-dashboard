@@ -1,7 +1,11 @@
 import { db } from "@/shared/api";
 import { notFound } from "next/navigation";
 import { verifySession } from "@/features/session";
-import { getUserBoardRole } from "../../../entities/board/index.server";
+import { getUserBoardRole } from "@/entities/board/index.server";
+import {
+  CreateCategoryButton,
+  CreateCategoryModal,
+} from "@/features/create-category";
 
 export const BoardPage = async ({
   params,
@@ -35,5 +39,15 @@ export const BoardPage = async ({
     return notFound();
   }
 
-  return <h1>{board.name}</h1>;
+  return (
+    <div className="flex">
+      <div>
+        <CreateCategoryButton />
+      </div>
+      <div>
+        <h1 className="text-center w-full">{board.name}</h1>
+      </div>
+      <CreateCategoryModal boardId={boardId} />
+    </div>
+  );
 };
