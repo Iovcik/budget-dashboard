@@ -6,6 +6,7 @@ import {
   CreateCategoryButton,
   CreateCategoryModal,
 } from "@/features/create-category";
+import { BoardMenu } from "../../../widgets/board-menu";
 
 export const BoardPage = async ({
   params,
@@ -40,14 +41,11 @@ export const BoardPage = async ({
   }
 
   return (
-    <div className="flex">
-      <div>
-        <CreateCategoryButton />
-      </div>
+    <div className="flex flex-col gap-5">
+      <BoardMenu boardId={boardId} />
       <div>
         <h1 className="text-center w-full">{board.name}</h1>
       </div>
-      <CreateCategoryModal boardId={boardId} />
     </div>
   );
 };
