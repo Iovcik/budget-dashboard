@@ -62,7 +62,7 @@ export const CategoryForm = (payload: Category) => {
           name="name"
           type="text"
           placeholder="New Category"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full size-6"
           minLength={3}
           maxLength={100}
           required
@@ -73,7 +73,7 @@ export const CategoryForm = (payload: Category) => {
           id="category-color"
           name="color"
           type="color"
-          className="input input-bordered cursor-pointer w-20"
+          className="input input-bordered cursor-pointer size-6 w-20"
           value={category.color}
           onChange={handleChange}
         />

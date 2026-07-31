@@ -1,1 +1,1 @@
-export { CategoryForm } from "./ui/CategoryForm"
+export { CategoryList } from "./ui/CategoryList"

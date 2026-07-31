@@ -2,11 +2,7 @@ import { db } from "@/shared/api";
 import { notFound } from "next/navigation";
 import { verifySession } from "@/features/session";
 import { getUserBoardRole } from "@/entities/board/index.server";
-import {
-  CreateCategoryButton,
-  CreateCategoryModal,
-} from "@/features/create-category";
-import { BoardMenu } from "../../../widgets/board-menu";
+import { BoardMenu } from "../../../widgets/board-settings";
 
 export const BoardPage = async ({
   params,
