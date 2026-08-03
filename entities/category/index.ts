@@ -1,0 +1,1 @@
+export { CategoryBaseEntitySchema } from "./model/schema"

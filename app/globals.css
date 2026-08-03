@@ -2,7 +2,6 @@
 
 @plugin "daisyui" {
   themes: false;
-  include: "button", "card", "input", "modal";
 }
 
 @plugin "daisyui/theme" {
