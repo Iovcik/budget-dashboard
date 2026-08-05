@@ -1,6 +1,6 @@
 import { MonthlyBudget } from "@/shared/api/generated/prisma";
 
-export interface IECreateMonthlyBudgetPayload extends Omit<MonthlyBudget, "id" | "createdAd" | "updatedAt" | "amount"> {
+export interface IECreateMonthlyBudgetPayload extends Omit<MonthlyBudget, "id" | "createdAt" | "updatedAt" | "amount"> {
     amount: number;
 }
 

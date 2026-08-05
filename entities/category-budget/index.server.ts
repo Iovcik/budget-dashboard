@@ -1,1 +1,1 @@
-export { createCategoryBudget, deleteCategoryBudget, getCategoriesByMonthlyBudget, getCategoryBudgetById, updateCategoryBudget } from "./api/categoryBudget"
+export { createCategoryBudget, deleteCategoryBudget, getCategoryBudgetsByBoardAndMonth, getCategoryBudgetById, updateCategoryBudget } from "./api/categoryBudget"
